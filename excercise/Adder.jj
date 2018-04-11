@@ -1,0 +1,76 @@
+PARSER_BEGIN(Add) 
+
+ 
+
+import java.io.*;
+
+ 
+
+class Add {
+
+ public static void main(String[] args) {
+
+  for(String arg : args) {
+
+   try {
+
+    System.out.println(eval(arg));
+
+   } catch (ParseException e) {
+
+    System.err.println(e.getMessage());
+
+   }
+
+  }
+
+ }
+
+ 
+
+ public static long eval(String state) throws ParseException {
+
+  Reader reader = new StringReader(state);
+
+  try {
+
+   return new Add(reader).exp();
+
+  } finally {
+
+   try { reader.close(); } catch(Exception e) {}
+
+  }
+
+ }
+
+}
+PARSER_END(Add)
+
+SKIP: { <[" ", "\t", "\r", "\n"]> } 
+
+TOKEN: {
+
+        <INTEGER:(["0"-"9"])+>
+
+}
+
+long exp():
+
+{ 
+
+        Token x, y;
+
+}
+
+{
+
+      x=<INTEGER> "+" y=<INTEGER> <EOF>
+
+{
+
+return Long.parseLong(x.image) + Long.parseLong(y.image);
+
+}
+
+}

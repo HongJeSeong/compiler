@@ -1,0 +1,91 @@
+options {
+
+   STATIC = false;
+
+}
+PARSER_BEGIN(getStr)
+
+
+
+import java.io.*;
+
+
+
+class getStr {
+
+ public static void main(String[] args) {
+
+  for(String arg : args) {
+
+   try {
+
+    System.out.println(eval(arg));
+
+   } catch (ParseException e) {
+
+    System.err.println(e.getMessage());
+
+   }
+
+  }
+
+ }
+
+
+
+ public static String eval(String state) throws ParseException {
+
+  Reader reader = new StringReader(state);
+
+  try {
+
+   return new getStr(reader).exp();
+
+  } finally {
+
+   try { reader.close(); } catch(Exception e) {}
+
+  }
+
+ }
+
+}
+PARSER_END(getStr)
+
+SKIP: { <["\t", "\r", "\n"]> }
+
+TOKEN: {
+
+        <IDENTIFIER: (["a"-"z", "A"-"Z"])+>
+      | <NUMBER: (["0"-"9"])+>
+      | <SPLIT: (["_"]) >
+
+}
+
+String exp():
+
+{
+
+        Token street, city, state, zipCode, country;
+        String streetS="Street : ";
+        String cityS="City : ";
+        String stateS="State : ";
+        String zipCodeS="zip Code : ";
+        String countryS="Country : ";
+
+}
+
+{
+street=<IDENTIFIER > <SPLIT > city=<IDENTIFIER > <SPLIT > state=< IDENTIFIER > <SPLIT > zipCode=< NUMBER > <SPLIT > country=< IDENTIFIER > <EOF>
+
+{
+streetS=streetS+street.image;
+stateS=stateS+state.image;
+cityS=cityS+city.image;
+zipCodeS=zipCodeS+zipCode.image;
+countryS=countryS+country.image;
+return streetS+"\n"+stateS+"\n"+cityS+"\n"+zipCodeS+"\n"+countryS;
+
+}
+
+}
